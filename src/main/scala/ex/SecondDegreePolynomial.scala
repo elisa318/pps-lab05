@@ -23,7 +23,10 @@ object SecondDegreePolynomial:
   println((sum, sum.secondDegree, sum.firstDegree, sum.constant)) // 1.0 * X^2 + 1.0 * X + 3.0
   val multipleOperations = fullPolynomial - (anotherPolynomial + simplePolynomial)
   println((multipleOperations, multipleOperations.secondDegree, multipleOperations.firstDegree, multipleOperations.constant)) // 2.0 * X^2 + 1.0 * X + 2.0
-
+  println {
+    simplePolynomial.equals(simplePolynomial)
+  }
+  println(simplePolynomial.toString)
 
 /** Hints:
   *   - implement SecondDegreePolynomial with a SecondDegreePolynomialImpl class, similar to PersonImpl in slides
@@ -32,13 +35,12 @@ object SecondDegreePolynomial:
   *   - check equality and toString now
   */
 
-class SecondDegreePolynomialImpl(override val secondDegree : Double, override val firstDegree : Double, override val constant : Double) extends SecondDegreePolynomial :
+case class SecondDegreePolynomialImpl(override val secondDegree : Double, override val firstDegree : Double, override val constant : Double) extends SecondDegreePolynomial :
 
   override def +(polynomial: SecondDegreePolynomial): SecondDegreePolynomial =
     SecondDegreePolynomialImpl(secondDegree + polynomial.secondDegree, firstDegree + polynomial.firstDegree, constant + polynomial.constant )
 
-  override def -(polynomial:
-                 SecondDegreePolynomial): SecondDegreePolynomial =
+  override def -(polynomial: SecondDegreePolynomial): SecondDegreePolynomial =
     SecondDegreePolynomialImpl(secondDegree - polynomial.secondDegree, firstDegree - polynomial.firstDegree, constant - polynomial.constant )
 
 
