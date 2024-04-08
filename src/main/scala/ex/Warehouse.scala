@@ -8,7 +8,7 @@ trait Item:
   def tags: Sequence[String]
 
 object Item:
-  def apply(code: Int, name: String, tags: Sequence[String] = Sequence.empty): Item = ???
+  def apply(code: Int, name: String, tags: Sequence[String] = Sequence.empty): Item = ItemImpl(code, name, tags)
 
 /**
  * A warehouse is a place where items are stored.
@@ -45,7 +45,7 @@ trait Warehouse:
 end Warehouse
 
 object Warehouse:
-  def apply(): Warehouse = ???
+  def apply(): Warehouse = WarehouseImpl()
 
 @main def mainWarehouse(): Unit =
   val warehouse = Warehouse()
@@ -75,3 +75,17 @@ object Warehouse:
  * - Implement remove using filter
  * - Refactor the code of Item accepting a variable number of tags (hint: use _*)
 */
+case class ItemImpl(override val code: Int, override val name: String, override val tags: Sequence[String] = Sequence.empty) extends Item
+
+case class WarehouseImpl() extends  Warehouse :
+  opaque type items = Sequence[Item]
+  override def store(item: Item): Unit = ???
+
+
+  override def searchItems(tag: String): Sequence[Item] = ???
+
+  override def retrieve(code: Int): Optional[Item] = ???
+
+  override def remove(item: Item): Unit = ???
+
+  override def contains(itemCode: Int): Boolean = ???
