@@ -2,6 +2,8 @@ package ex
 
 import util.Optionals.Optional
 import util.Sequences.*
+
+import scala.collection.immutable.Stream.Empty
 trait Item:
   def code: Int
   def name: String
@@ -54,17 +56,17 @@ object Warehouse:
   val dellInspiron = Item(34, "Dell Inspiron 13", Sequence("notebook"))
   val xiaomiMoped = Item(35, "Xiaomi S1", Sequence("moped", "mobility"))
 
-  warehouse.contains(dellXps.code) // false
   warehouse.store(dellXps) // side effect, add dell xps to the warehouse
   warehouse.contains(dellXps.code) // true
   warehouse.store(dellInspiron) // side effect, add dell Inspiron to the warehouse
   warehouse.store(xiaomiMoped) // side effect, add xiaomi moped to the warehouse
-  warehouse.searchItems("mobility") // Sequence(xiaomiMoped)
+  println(warehouse.searchItems("mobility") )// Sequence(xiaomiMoped)
   warehouse.searchItems("notebook") // Sequence(dellXps, dell Inspiron)
   warehouse.retrieve(11) // None
-  warehouse.retrieve(dellXps.code) // Just(dellXps)
+  println(warehouse.retrieve(dellXps.code))// Just(dellXps)
   warehouse.remove(dellXps) // side effect, remove dell xps from the warehouse
   warehouse.retrieve(dellXps.code) // None
+  println(warehouse.retrieve(dellXps.code))
 
 /** Hints:
  * - Implement the Item with a simple case class
@@ -79,13 +81,22 @@ case class ItemImpl(override val code: Int, override val name: String, override 
 
 case class WarehouseImpl() extends  Warehouse :
   opaque type items = Sequence[Item]
-  override def store(item: Item): Unit = ???
+  private var stored_items: items = Sequence.empty[Item]
 
+  override def store(item: Item): Unit =
+    stored_items = stored_items.concat(Sequence(item))
 
-  override def searchItems(tag: String): Sequence[Item] = ???
+  override def searchItems(tag: String): Sequence[Item] =
+    stored_items.filter(_.tags.contains(tag))
 
-  override def retrieve(code: Int): Optional[Item] = ???
+  override def retrieve(code: Int): Optional[Item] =
+    stored_items.find(_.code == code)
 
-  override def remove(item: Item): Unit = ???
+  override def remove(item: Item): Unit =
+    stored_items = stored_items.filter(_.code != item.code)
 
-  override def contains(itemCode: Int): Boolean = ???
+  override def contains(itemCode: Int): Boolean =
+    stored_items.find(_.code == itemCode) match {
+      case Optional.Empty() => false
+      case _ => true
+    }

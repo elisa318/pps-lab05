@@ -55,12 +55,13 @@ object Sequences: // Essentially, generic linkedlists
   import Sequences.* 
   val sequence = Sequence(1, 2, 3)
   println(sequence)
-  println(sequence.head)
+  println(sequence.concat(Sequence(5)))
+  /*println(sequence.head)
   println(sequence.map(_ * 2))
   println(sequence.flatMap(x => Sequence(x, x * 2)))
   println(sequence.filter(_ % 2 == 0))
   println(sequence.concat(Sequence(4, 5, 6)))
   println(sequence.find(_ % 2 == 0))
-  println(sequence.contains(2))
+  println(sequence.contains(2))*/
 
 
